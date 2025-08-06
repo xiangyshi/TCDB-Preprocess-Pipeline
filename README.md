@@ -56,7 +56,7 @@ The tool provides a command-line interface with the `tcdb-visualize` command.
 #### Basic Syntax
 
 ```bash
-tcdb-visualize [OPTIONS] -p PLOT_TYPE -o OUTPUT_DIR
+tcdb-visualize [OPTIONS] -o OUTPUT_DIR
 ```
 
 #### Input Options
@@ -77,6 +77,7 @@ tcdb-visualize [OPTIONS] -p PLOT_TYPE -o OUTPUT_DIR
 #### Output Options
 
 - `-o <output_dir>` or `--output <output_dir>`: Specify output directory
+- `-d <csv_file>` or `--data <csv_file>`: Export data to CSV file
 - `--log-level <level>`: Set logging level (DEBUG, INFO, WARNING, ERROR)
 
 ### Example Commands
@@ -111,7 +112,23 @@ tcdb-visualize -c data/cdd_files/singles.cdd -p general,char,summary -t 1.A.1 -o
 tcdb-visualize -r data/rescue_files -p all -t 1.A.12 -o output/
 ```
 
-#### 4. Advanced Usage with Logging
+#### 4. Export Data to CSV
+
+```bash
+# Export domain data to CSV file
+tcdb-visualize -c data/cdd_files/singles.cdd -d domain_data.csv -t 1.A.1 -o output/
+
+# Export rescue data to CSV file
+tcdb-visualize -r data/rescue_files -d rescue_data.csv -t 1.A.12 -o output/
+
+# Export data with plots
+tcdb-visualize -c data/cdd_files/singles.cdd -p general -d domain_data.csv -t 1.A.1 -o output/
+
+# Export data only (no plots)
+tcdb-visualize -c data/cdd_files/singles.cdd -d domain_data.csv -t 1.A.1 -o output/
+```
+
+#### 5. Advanced Usage with Logging
 
 ```bash
 # Run with detailed logging
@@ -169,6 +186,24 @@ output/
 └── svg/
     └── *.svg (individual domain plots)
 ```
+
+### CSV Data Format
+
+When using the `-d` option, the tool exports data in the following CSV format:
+
+```csv
+Accession,Length,Family,Subfamily,Domains,Separators
+Q8IUQ4,282,8.A.133,8.A.133.1,"[('CDD438216', 39, 79, 9.6e-07)]","[('CDD438216 to END', 80, 281)]"
+O43255,324,8.A.133,8.A.133.1,"[('CDD438216', 78, 119, 1.6e-06)]","[('BEGIN to CDD438216', 0, 77), ('CDD438216 to END', 120, 323)]"
+```
+
+**Column Descriptions:**
+- **Accession**: Protein accession number
+- **Length**: Protein sequence length
+- **Family**: TCDB family identifier
+- **Subfamily**: System identifier (used as subfamily)
+- **Domains**: List of domain tuples in format `(domain_id, start, end, evalue)`
+- **Separators**: List of inter-domain region tuples in format `(description, start, end)`
 
 ## Configuration
 

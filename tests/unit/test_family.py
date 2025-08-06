@@ -73,8 +73,8 @@ class TestFamily:
         family = self.make_family()
         csv_rows = family.generate_csv_data()
         assert len(csv_rows) == 2
-        assert any("A:1-50" in row[4] for row in csv_rows)
-        assert any("B:51-100" in row[4] for row in csv_rows)
+        assert any("('A', 1, 50," in row[4] for row in csv_rows)
+        assert any("('B', 51, 100," in row[4] for row in csv_rows)
 
     def test_to_dataframe(self):
         family = self.make_family()

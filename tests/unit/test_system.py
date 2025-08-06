@@ -53,12 +53,16 @@ class TestSystem:
 
     def test_csv_row(self):
         system = self.make_simple_system()
+        # Re-run hole detection with smaller threshold to detect the gap
+        system._identify_holes(threshold=1, margin=0)
         row = system.generate_csv_row()
-        assert row[0] == "P00001"
-        assert row[2] == "1.A.1"
-        assert row[3] == "sys1"
-        assert "A:1-50" in row[4]
-        assert "B:61-100" in row[4]
+        assert row[0] == "P00001"  # accession
+        assert row[1] == "120"     # length
+        assert row[2] == "1.A.1"   # family
+        assert row[3] == "sys1"    # subfamily
+        assert "('A', 1, 50," in row[4]  # domains
+        assert "('B', 61, 100," in row[4]  # domains
+        assert "('BEGIN to END', 50, 61)" in row[5]  # separators
 
     def test_characteristic_domains(self):
         system = self.make_simple_system()

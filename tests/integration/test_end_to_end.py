@@ -194,6 +194,7 @@ class TestEndToEndWorkflow:
         assert csv_data[0][0] == 'P00001'  # accession
         assert csv_data[0][2] == '1.A.1'   # family
         assert csv_data[0][3] == 'sys1'    # system
+        assert "('A', 1, 50," in csv_data[0][4]  # domains
     
     def test_error_handling_integration(self):
         """Test error handling in the integrated workflow."""

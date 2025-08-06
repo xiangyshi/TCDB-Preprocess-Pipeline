@@ -196,4 +196,4 @@ class TestFamilyService:
         assert csv_rows[0][0] == 'P00001'  # accession
         assert csv_rows[0][2] == '1.A.1'   # family
         assert csv_rows[0][3] == 'sys1'    # system
-        assert 'A:1-50' in csv_rows[0][4]  # domains 
+        assert "('A', 1, 50," in csv_rows[0][4]  # domains 

@@ -149,18 +149,55 @@ class System:
         Generate CSV row for this system.
         
         Returns:
-            List containing system data for CSV export
+            List containing system data for CSV export in the format:
+            Accession,Length,Family,Subfamily,Domains,Separators
         """
-        domain_str = ";".join([f"{d.dom_id}:{d.start}-{d.end}" for d in self.domains])
-        separator_str = ";".join([f"{h.start}-{h.end}" for h in self.holes])
+        # Format domains as list of tuples: (domain_id, start, end, evalue)
+        domain_tuples = []
+        for domain in self.domains:
+            if domain.type != "hole":  # Only include actual domains, not holes
+                domain_tuples.append((domain.dom_id, domain.start, domain.end, domain.evalue))
+        
+        # Format separators (holes) as list of tuples: (description, start, end)
+        separator_tuples = []
+        for hole in self.holes:
+            # Create descriptive name for the hole
+            if hole.start == 0:
+                separator_tuples.append(("BEGIN to END", hole.start, hole.end))
+            elif hole.end >= self.sys_len:
+                separator_tuples.append(("BEGIN to END", hole.start, hole.end))
+            else:
+                # Find adjacent domains to create descriptive name
+                prev_domain = None
+                next_domain = None
+                for domain in self.domains:
+                    if domain.type != "hole":
+                        if domain.end < hole.start:
+                            prev_domain = domain
+                        elif domain.start > hole.end:
+                            next_domain = domain
+                            break
+                
+                if prev_domain and next_domain:
+                    separator_tuples.append((f"{prev_domain.dom_id} to {next_domain.dom_id}", hole.start, hole.end))
+                elif prev_domain:
+                    separator_tuples.append((f"{prev_domain.dom_id} to END", hole.start, hole.end))
+                elif next_domain:
+                    separator_tuples.append((f"BEGIN to {next_domain.dom_id}", hole.start, hole.end))
+                else:
+                    separator_tuples.append(("BEGIN to END", hole.start, hole.end))
+        
+        # Convert to string representation
+        domains_str = str(domain_tuples) if domain_tuples else "[]"
+        separators_str = str(separator_tuples) if separator_tuples else "[]"
         
         return [
             self.accession,
             str(self.sys_len),
             self.fam_id,
-            self.sys_id,
-            domain_str,
-            separator_str
+            self.sys_id,  # Using sys_id as subfamily
+            domains_str,
+            separators_str
         ]
     
     def __repr__(self) -> str:
