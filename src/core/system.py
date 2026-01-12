@@ -160,32 +160,11 @@ class System:
         
         # Format separators (holes) as list of tuples: (description, start, end)
         separator_tuples = []
+        print("--------------------------------")
+        print(self.sys_id)
+        print(self.holes)
         for hole in self.holes:
-            # Create descriptive name for the hole
-            if hole.start == 0:
-                separator_tuples.append(("BEGIN to END", hole.start, hole.end))
-            elif hole.end >= self.sys_len:
-                separator_tuples.append(("BEGIN to END", hole.start, hole.end))
-            else:
-                # Find adjacent domains to create descriptive name
-                prev_domain = None
-                next_domain = None
-                for domain in self.domains:
-                    if domain.type != "hole":
-                        if domain.end < hole.start:
-                            prev_domain = domain
-                        elif domain.start > hole.end:
-                            next_domain = domain
-                            break
-                
-                if prev_domain and next_domain:
-                    separator_tuples.append((f"{prev_domain.dom_id} to {next_domain.dom_id}", hole.start, hole.end))
-                elif prev_domain:
-                    separator_tuples.append((f"{prev_domain.dom_id} to END", hole.start, hole.end))
-                elif next_domain:
-                    separator_tuples.append((f"BEGIN to {next_domain.dom_id}", hole.start, hole.end))
-                else:
-                    separator_tuples.append(("BEGIN to END", hole.start, hole.end))
+            separator_tuples.append((hole.best_name, hole.start, hole.end)) 
         
         # Convert to string representation
         domains_str = str(domain_tuples) if domain_tuples else "[]"

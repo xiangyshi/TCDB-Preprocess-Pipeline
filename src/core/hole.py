@@ -63,6 +63,7 @@ class Hole:
         left_doms.sort(key=lambda x: x.bitscore, reverse=True)
         right_doms.sort(key=lambda x: x.bitscore, reverse=True)
         
+        print(left_doms, right_doms)
         # Default names if no domains found
         left_best = "BEGIN"
         right_best = "END"
@@ -72,7 +73,8 @@ class Hole:
             left_best = left_doms[0].dom_id
         if right_doms:
             right_best = right_doms[0].dom_id
-        
+        print(left_best, right_best)
+        print()
         return f"{left_best} to {right_best}"
     
     def to_tuple(self) -> Tuple[str, int, int]:
