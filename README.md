@@ -283,9 +283,13 @@ python -m build
 
 ### Common Issues
 
-1. **Import Errors**: Ensure you've installed the package correctly with `pip install -e .`
+1. **Changes not reflected (Repackaging)**: 
+   If you modified the code but don't see changes, you likely need to install in editable mode.
+   Run `pip install -e .` once. After that, no "repackaging" is needed; changes apply immediately.
 
-2. **File Not Found**: Check that input files exist and paths are correct
+2. **Import Errors**: Ensure you've installed the package correctly with `pip install -e .`
+
+3. **File Not Found**: Check that input files exist and paths are correct
 
 3. **Permission Errors**: Ensure you have write permissions for the output directory
 

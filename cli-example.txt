@@ -1,0 +1,60 @@
+// Setup CLI
+
+>>> conda activate tcdb-env
+>>> pip install -e .
+
+
+// Matplotlib Backend Adjustment
+
+>>> export MPLBACKEND=Agg
+
+
+/* 
+Example 1 - Getting Training Data Through CDD File
+ -c: CDD mode, takes in 1 cdd file to parse
+ -d: processed data store location, in default folder output/
+ --log-level ERROR: avoid verbose 
+*/
+
+>>> tcdb-visualize -c data/cdd_files/singles.cdd -d data.csv --log-level ERROR
+
+
+/*
+Example 2 - Getting Training Data Through Resc Files
+ -r: Rescue mode, takes in rescue file folder
+ -d: processed data store location, in default folder output/
+ --log-level ERROR: avoid verbose
+*/
+
+>>> tcdb-visualize -r data/rescue_files/ -d data.csv --log-level ERROR
+
+/*
+Example 3 - Plotting using CDD File
+ -t: TCIDs (family) to process
+ -c: CDD mode, takes in 1 cdd file to parse
+ -p: Takes in plotting options (all|[general,char,arch,summary])
+ --log-level ERROR: avoid verbose
+*/
+
+>>> tcdb-visualize -t 1.A.102 -c data/cdd_files/singles.cdd -p all --log-level ERROR
+
+
+/*
+Example 4 - Plotting using Rescue Files for Specific Family
+ -r: Rescue mode
+ -t: Target specific family (e.g., 1.A.12)
+ -p: Generate summary and characteristic plots only
+ -o: Custom output directory
+*/
+
+>>> tcdb-visualize -r data/rescue_files/ -t 1.A.12 -p summary,char_rescue -o output/custom_run/ --log-level INFO
+
+
+/*
+Example 5 - Architecture Comparison Only
+ -c: CDD mode
+ -t: Target family
+ -p: Generate only architecture comparison plots
+*/
+
+>>> tcdb-visualize -c data/cdd_files/singles.cdd -t 1.A.1 -p arch -o output/arch_plots/
